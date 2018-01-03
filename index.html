@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p :title="msg" v-html="msg"></p>
+        <p :title="msg" v-if="seen">{{msg}}</p>
+        <input type="text" v-model="msg">
+        <input type="button" @click="reverseMsg" value="123">
+        <ol>
+            <li v-for="item in items" :id="item.id" >{{item.text}}</li>
+        </ol>
+
+        <ol>
+            <todo-item v-for="(item,index) in items" :todo="item" :index="item.id" :key="index"></todo-item>
+        </ol>
+    </div>
+    <div id="vm">
+        <p v-once>{{msg}}</p>
+        <p>{{rawHtml}}</p>
+        <p v-html='rawHtml'></p>
+
+        <button v-bind:disabled="isButtonDisabled">Button</button>
+        <p>{{ok?'yes':'no'}}</p>
+        <p :id="'list'+ok">ddd</p>
+
+        <form action="" v-on:submit.prevent="handle"></form>
+
+        <p>{{msg}}</p>
+        <p>{{reveredMsg}}</p>
+        <p>{{reveredMsgs()}}</p>
+    </div>
+</body>
+    <script>
+        Vue.component('todo-item',{
+            props:["todo","index"],
+            template: '<li>{{index}}{{todo.text}}</li>'
+        })     
+
+        var app= new Vue({
+            el:"#app",
+            data:{
+                msg:"hello World!"+new Date().toLocaleDateString(),
+                seen:false,
+                items:[
+                    {id:1,text: '学习 JavaScript' },
+                    {id:2,text: '学习 Vue' },
+                    {id:3,text: '整个牛项目' }
+                ]
+            },
+            methods:{
+                reverseMsg:function(){
+                    this.msg=this.msg.split("").reverse().join("")
+                }
+            }
+        })
+
+        var vm=new Vue({
+            el:"#vm",
+            data:{
+                msg:"hello world",
+                rawHtml:"<span style='color:red'>This should be red</span>",
+                isButtonDisabled:false,
+                ok:false
+            },
+            computed:{
+                reveredMsg:function(){
+                    return this.msg.split("").reverse().join("")
+                }
+            },
+            methods:{
+                reveredMsgs:function(){
+                    return this.msg.split("").reverse().join("")
+                }
+            }
+        })
+    </script>
+</html>
